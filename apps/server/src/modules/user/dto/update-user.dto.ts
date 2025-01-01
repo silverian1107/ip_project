@@ -1,23 +1,11 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 
-export class CreateUserDto {
-  @ApiProperty({ description: 'Username of the user' })
-  username: string;
-
-  @ApiProperty({
-    description: 'Email address of the user',
-    example: 'example@example.com',
+export class UpdateUserDto {
+  @ApiPropertyOptional({
+    description: 'Full name of the user',
+    example: 'John Doe',
   })
-  email: string;
-
-  @ApiProperty({
-    description: 'Password of the user',
-    example: 'securepassword123',
-  })
-  password: string;
-
-  @ApiProperty({ description: 'Full name of the user', example: 'John Doe' })
-  fullName: string;
+  fullName?: string;
 
   @ApiPropertyOptional({
     description: 'Avatar URL of the user',

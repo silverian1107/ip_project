@@ -1,13 +1,15 @@
+import { Like } from 'src/modules/like/entities/like.entity';
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
-  JoinColumn,
   CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from '../../user/entities/user.entity';
 import { Drama } from '../../drama/entities/drama.entity';
+import { User } from '../../user/entities/user.entity';
 
 export enum PostType {
   USER_WALL = 'wall',
@@ -46,6 +48,12 @@ export class Post {
   @Column({ nullable: true })
   dramaId?: number;
 
+  @OneToMany(() => Like, (like) => like.post)
+  likes: Like[];
+
   @CreateDateColumn()
   createdAt: Date;
+
+  @Column({ default: 0 })
+  likeCount: number;
 }

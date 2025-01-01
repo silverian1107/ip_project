@@ -6,8 +6,11 @@ import {
   OneToMany,
   ManyToMany,
   JoinTable,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Post } from '../../post/entities/post.entity';
+import { Like } from 'src/modules/like/entities/like.entity';
 
 @Entity()
 export class User {
@@ -22,6 +25,27 @@ export class User {
 
   @Column()
   password: string;
+
+  @Column({ nullable: true })
+  fullName: string;
+
+  @Column({ nullable: true })
+  avatarUrl: string;
+
+  @Column({ nullable: true })
+  bio: string;
+
+  @Column({ nullable: true })
+  location: string;
+
+  @Column({ type: 'date', nullable: true })
+  birthDate: Date;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
@@ -42,4 +66,7 @@ export class User {
 
   @ManyToMany(() => User, (user) => user.followers)
   followings: User[];
+
+  @OneToMany(() => Like, (like) => like.user)
+  likes: Like[];
 }
