@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useSignUp } from '../hooks/use-auth';
+import { useSignUp } from '../hooks/queries/use-auth';
 
 function SignUp() {
   const {

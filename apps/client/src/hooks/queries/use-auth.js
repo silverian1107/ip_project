@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import unauthClient from '../clients/base';
+import { unauthClient } from '../../clients/base';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
