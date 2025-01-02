@@ -1,57 +1,88 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useSignUp } from '../hooks/use-auth';
 
 function SignUp() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const navigate = useNavigate(); // 네비게이션 훅
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors }
+  } = useForm();
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (password !== confirmPassword) {
-            alert("비밀번호가 일치하지 않습니다!");
-            return;
-        }
-        alert(`회원가입 성공!\n이메일: ${email}`);
-        navigate('/login'); // 회원가입 성공 시 로그인 페이지로 이동
-    };
+  const signup = useSignUp();
 
-    return (
-        <div className="auth-container">
-            <h1 className="auth-logo">DramaSphere</h1>
-            <form className="auth-form" onSubmit={handleSubmit}>
-                <label htmlFor="email">아이디</label>
-                <input 
-                    value={email} 
-                    onChange={(e) => setEmail(e.target.value)} 
-                    id="email" 
-                    type="email" 
-                    placeholder="Email" 
-                />
+  const { t } = useTranslation('signup-form');
+  const password = watch('password');
 
-                <label htmlFor="password">비밀번호</label>
-                <input 
-                    value={password} 
-                    onChange={(e) => setPassword(e.target.value)} 
-                    id="password" 
-                    type="password" 
-                    placeholder="Password" 
-                />
+  const submitForm = async (data) => {
+    await signup.mutateAsync(data);
+  };
 
-                <label htmlFor="confirmPassword">비밀번호 확인</label>
-                <input 
-                    value={confirmPassword} 
-                    onChange={(e) => setConfirmPassword(e.target.value)} 
-                    id="confirmPassword" 
-                    type="password" 
-                    placeholder="Confirm Password" 
-                />
+  return (
+    <div className="auth-container">
+      <h1 className="auth-logo">DramaSphere</h1>
+      <form className="auth-form" onSubmit={handleSubmit(submitForm)}>
+        <label htmlFor="email">{t('email')}</label>
+        <input
+          {...register('email', {
+            required: t('validation.emailRequired'),
+            pattern: {
+              value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+              message: t('validation.emailInvalid')
+            }
+          })}
+          id="email"
+          type="email"
+          placeholder={t('email')}
+        />
+        {errors.email && (
+          <p className="error-message">{errors.email.message}</p>
+        )}
 
-                <button type="submit" className="auth-button">회원가입</button>
-            </form>
-        </div>
-    );
+        <label htmlFor="password">{t('password')}</label>
+        <input
+          {...register('password', {
+            required: t('validation.passwordRequired'),
+            minLength: {
+              value: 6,
+              message: t('validation.passwordLength')
+            }
+          })}
+          id="password"
+          type="password"
+          placeholder={t('password')}
+        />
+        {errors.password && (
+          <p className="error-message">{errors.password.message}</p>
+        )}
+
+        <label htmlFor="confirmPassword">{t('confirmPassword')}</label>
+        <input
+          {...register('confirmPassword', {
+            required: t('validation.confirmRequired'),
+            validate: (value) =>
+              value === password || t('validation.passwordsMatch')
+          })}
+          id="confirmPassword"
+          type="password"
+          placeholder={t('confirmPassword')}
+        />
+        {errors.confirmPassword && (
+          <p className="error-message">{errors.confirmPassword.message}</p>
+        )}
+
+        <button
+          type="submit"
+          className="auth-button"
+          disabled={signup.isPending}
+        >
+          {signup.isPending ? t('signingUp') : t('signUp')}
+        </button>
+      </form>
+    </div>
+  );
 }
 
 export default SignUp;

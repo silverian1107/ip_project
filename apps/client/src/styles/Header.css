@@ -8,6 +8,7 @@
   color: #fff;
   position: relative;
   flex-wrap: wrap; /* 화면이 작아질 때 요소들이 줄어들 수 있게 설정 */
+  z-index: 5; /* 헤더가 다른 요소 위에 표시되도록 설정 */
 }
 
 /* 로고는 헤더 중앙에 배치 */
@@ -16,11 +17,11 @@
   font-size: 24px;
   font-weight: bold;
   text-decoration: none;
-  position: absolute;
+  position: absolute; /* 로고를 중앙 정렬 위해 absolute 사용 */
   left: 50%;
-  transform: translateX(-50%);
-  width: 100%; /* 로고가 중앙에 위치하도록 width 설정 */
-  text-align: center; /* 로고를 가운데 정렬 */
+  transform: translateX(-50%); /* X축 기준으로 정확히 중앙 정렬 */
+  text-align: center;
+  z-index: 2;
 }
 
 /* 왼쪽: 마이페이지와 커뮤니티 */
@@ -36,9 +37,9 @@
   display: flex;
   align-items: center;
   gap: 15px;
-  flex-shrink: 1; /* 오른쪽 영역이 공간이 부족할 때 줄어들도록 설정 */
   flex-wrap: wrap; /* 화면 크기 줄어들면 내용이 줄어들도록 설정 */
   justify-content: flex-end; /* 오른쪽 정렬 */
+  flex-shrink: 1; /* 오른쪽 영역이 공간이 부족할 때 줄어들도록 설정 */
 }
 
 /* 마이페이지와 커뮤니티 버튼 */
@@ -48,6 +49,8 @@
   color: #fff;
   text-decoration: none;
   cursor: pointer;
+  pointer-events: auto; /* 클릭 가능하도록 설정 */
+  z-index: 3; /* 로고보다 위에 표시 */
 }
 
 /* 검색창 스타일 */
@@ -82,13 +85,13 @@
 
 .dropdown {
   position: absolute;
-  top: 25px; /* 버튼 바로 아래에 드롭다운 배치 */
+  top: 30px; /* 버튼 바로 아래에 드롭다운 배치 */
   left: 0;
   background-color: black;
   border: 1px solid #ccc;
   border-radius: 5px;
   width: 80px;
-  z-index: 10;
+  z-index: 4; /* 드롭다운이 다른 요소 위에 표시되도록 설정 */
   overflow: hidden; /* 드롭다운 내부 내용 잘리지 않게 설정 */
 }
 
@@ -97,6 +100,11 @@
   cursor: pointer;
   text-align: center;
   display: block;
+  color: #fff;
+}
+
+.dropdown-item:hover {
+  background-color: #1e90ff; /* 호버 시 배경색 변경 */
 }
 
 /* 미디어 쿼리로 작은 화면 대응 */
@@ -125,5 +133,6 @@
 
   .logo {
     font-size: 20px; /* 화면이 작아지면 로고 크기 조정 */
+    margin: 0 auto;
   }
 }
