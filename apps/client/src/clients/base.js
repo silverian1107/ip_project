@@ -3,7 +3,7 @@ import { toast } from 'sonner';
 import Cookies from 'js-cookie';
 
 export const unauthClient = axios.create({
-  baseURL: `${process.env.REACT_APP_API}/auth`,
+  baseURL: `http://localhost:3001/api/auth`,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json'
@@ -29,7 +29,7 @@ unauthClient.interceptors.response.use(
 );
 
 export const AxiosClient = axios.create({
-  baseURL: 'http://localhost:3000/api',
+  baseURL: 'http://localhost:3001/api',
   headers: {
     'Content-Type': 'application/json'
   },
