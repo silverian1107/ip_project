@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import '../styles/Header.css';
-import { useAccount } from '../hooks/queries/use-auth';
+import { useAccount, useLogout } from '../hooks/queries/use-auth';
+import { toast } from 'sonner';
 
 function Header() {
   const { t, i18n } = useTranslation('header');
   const { data: account, isLoading, isError } = useAccount();
+
+  const logout = useLogout();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
@@ -23,7 +26,6 @@ function Header() {
   const toggleProfileDropdown = () => {
     setIsProfileDropdownOpen(!isProfileDropdownOpen);
   };
-  console.log(account);
 
   return (
     <div className="header">
@@ -83,16 +85,19 @@ function Header() {
             {isProfileDropdownOpen && (
               <div className="absolute right-0 w-48 mt-2 overflow-hidden text-black bg-white rounded-md shadow-lg">
                 <Link
-                  to="/edit-profile"
+                  to="/mypage"
                   className="block px-4 py-2 hover:bg-gray-200"
                   onClick={() => setIsProfileDropdownOpen(false)}
                 >
-                  {t('editProfile')}
+                  {t('viewProfile')}
                 </Link>
                 <Link
-                  to="/logout"
                   className="block px-4 py-2 hover:bg-gray-200"
-                  onClick={() => setIsProfileDropdownOpen(false)}
+                  onClick={() => {
+                    logout();
+                    toast.success('Logged out');
+                    setIsProfileDropdownOpen(false);
+                  }}
                 >
                   {t('logout')}
                 </Link>

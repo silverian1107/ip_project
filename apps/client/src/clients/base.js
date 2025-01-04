@@ -52,14 +52,24 @@ AuthClient.interceptors.response.use(
     return response.data;
   },
   (error) => {
+    const status = error.response?.status;
     const errorMessage =
       error.response?.data?.message ||
       error.response?.statusText ||
       'An unexpected error occurred';
 
+    if (status === 401) {
+      console.warn('Unauthorized: User is not authenticated.');
+      return Promise.reject(error);
+    }
+
+    if (status === 403) {
+      return Promise.reject(error);
+    }
+
     toast.error(errorMessage);
 
-    return Promise.reject();
+    return Promise.reject(error);
   }
 );
 
@@ -76,9 +86,16 @@ export const createCustomClient = (customBaseURL) => {
     )
   );
 
+  AuthClient.interceptors.response.forEach((interceptor) =>
+    customClient.interceptors.response.use(
+      interceptor.fulfilled,
+      interceptor.rejected
+    )
+  );
+
   return customClient;
 };
 
-const UserClient = createCustomClient('http://localhost:3000/api/users');
+const UserClient = createCustomClient('http://localhost:3001/api/users');
 
 export { UserClient };

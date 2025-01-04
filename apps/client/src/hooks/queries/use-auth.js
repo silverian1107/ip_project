@@ -1,17 +1,32 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AuthClient, UnauthClient } from '../../clients/base';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import Cookies from 'js-cookie';
+import { useEffect, useState } from 'react';
 
 export const useAccount = () => {
+  const [token, setToken] = useState(Cookies.get('access_token'));
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const currentToken = Cookies.get('access_token');
+      if (currentToken !== token) {
+        setToken(currentToken);
+      }
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, [token]);
+
   return useQuery({
     queryKey: ['account'],
     queryFn: async () => {
       const response = await AuthClient.get('/auth/me');
       return response.data;
     },
-    enabled: !!Cookies.get('access_token')
+    enabled: !!token,
+    retry: 1
   });
 };
 
@@ -31,15 +46,27 @@ export const useSignUp = () => {
 
 export const useLogin = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ['login'],
     mutationFn: async (data) => {
       return await UnauthClient.post('/login', data);
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       toast.success('Logged In');
-      navigate('/');
       Cookies.set('access_token', data.data.access_token);
+      navigate('/');
+
+      await queryClient.invalidateQueries('account');
     }
   });
+};
+
+export const useLogout = () => {
+  const queryClient = useQueryClient();
+
+  return async () => {
+    Cookies.remove('access_token');
+    await queryClient.invalidateQueries('account');
+  };
 };

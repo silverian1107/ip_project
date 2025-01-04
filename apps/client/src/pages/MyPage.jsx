@@ -1,110 +1,65 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import '../styles/MyPage.css'
+import React, { useState } from 'react';
+import ProfileHeader from '../components/profile/profile-header';
+import TabContent from '../components/profile/tab-content';
+import LoadingSpinner from '../components/ui/spinner';
+import { useProfile } from '../hooks/queries/use-user';
 
-export default function MyPage({ profile }) {
-    const [activeTab, setActiveTab] = useState("찜");
-    const navigate = useNavigate();
+const dummyDramas = [
+  {
+    title: 'Eternal Sunshine',
+    rating: 4.5,
+    review: 'A masterpiece that explores the depths of human emotions.',
+    date: '2024-07-07',
+    image: '/placeholder.svg?height=300&width=200'
+  },
+  {
+    title: 'Midnight Serenade',
+    rating: 4.0,
+    review: 'An enchanting journey through love and music.',
+    date: '2024-07-08',
+    image: '/placeholder.svg?height=300&width=200'
+  }
+];
 
-    const handleTabClick = (tab) => setActiveTab(tab);
+export default function MyPage() {
+  const [activeTab, setActiveTab] = useState('Wishlist');
+  const { data: account, isLoading, isError } = useProfile();
 
-    const dummyDramas = [
-        { title: "드라마 1", rating: 4.5, review: "재미있게 봤습니다.", date: "2024-07-07" },
-        { title: "드라마 2", rating: 4.0, review: "괜찮았어요.", date: "2024-07-08" },
-    ];
+  const handleTabClick = (tab) => setActiveTab(tab);
 
-    return (
-        <div className="mypage">
-            {/* 프로필 섹션 */}
-            <div className="profile-section">
-                <img
-                    src={profile.profilePic}
-                    alt="프로필 사진"
-                    className="profile-pic"
-                />
-                <div className="profile-info">
-                    <h2>
-                        {profile.name}{" "}
-                        <span
-                            role="img"
-                            aria-label="edit"
-                            onClick={() => navigate("/edit-profile")}
-                            className="edit-button"
-                            style={{ cursor: "pointer" }}
-                        >
-                            ✐
-                        </span>
-                    </h2>
-                    <p>{profile.email}</p>
-                    <p>
-                        {profile.following} following {profile.follower} follower
-                    </p>
-                    <p>
-                        <a
-                            href="#"
-                            className={activeTab === "게시물" ? "active-tab" : ""}
-                            onClick={() => handleTabClick("게시물")}
-                        >
-                            게시물
-                        </a>{" "}
-                        |{" "}
-                        <a
-                            href="#"
-                            className={activeTab === "찜" ? "active-tab" : ""}
-                            onClick={() => handleTabClick("찜")}
-                        >
-                            찜
-                        </a>{" "}
-                        |{" "}
-                        <a
-                            href="#"
-                            className={activeTab === "리뷰" ? "active-tab" : ""}
-                            onClick={() => handleTabClick("리뷰")}
-                        >
-                            리뷰
-                        </a>
-                    </p>
-                </div>
-            </div>
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
-            {/* 컨텐츠 섹션 */}
-            <div className="content-section">
-                {activeTab === "찜" && (
-                    <div className="wishlist">
-                        <h3>찜한 드라마</h3>
-                        <div className="drama-list">
-                            {dummyDramas.map((drama, index) => (
-                                <div key={index} className="drama-item">
-                                    <img
-                                        src="https://via.placeholder.com/150x200"
-                                        alt={drama.title}
-                                    />
-                                    <p>{drama.title}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
-                {activeTab === "리뷰" && (
-                    <div className="review-list">
-                        <h3>리뷰</h3>
-                        {dummyDramas.map((drama, index) => (
-                            <div key={index} className="review-item">
-                                <h4>{drama.title}</h4>
-                                <p>⭐ {drama.rating}</p>
-                                <p>{drama.review}</p>
-                                <p>{drama.date}</p>
-                                <button>👍 1</button>
-                            </div>
-                        ))}
-                    </div>
-                )}
-                {activeTab === "게시물" && (
-                    <div className="posts">
-                        <h3>게시물이 없습니다.</h3>
-                    </div>
-                )}
-            </div>
+  if (isError) {
+    return <div>Error loading profile data</div>;
+  }
+
+  return (
+    <div className="min-h-screen text-white bg-gray-900">
+      <div className="container px-4 py-8 mx-auto">
+        <ProfileHeader profile={account} />
+
+        <div className="mt-8">
+          <div className="flex space-x-4 border-b border-gray-700">
+            {['Wishlist', 'Reviews', 'Posts'].map((tab) => (
+              <button
+                key={tab}
+                className={`py-2 px-4 focus:outline-none ${
+                  activeTab === tab
+                    ? 'text-blue-400 border-b-2 border-blue-400'
+                    : 'text-gray-400 hover:text-gray-200'
+                }`}
+                onClick={() => handleTabClick(tab)}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+
+          <TabContent activeTab={activeTab} dramas={dummyDramas} />
         </div>
-    );
+      </div>
+    </div>
+  );
 }

@@ -42,4 +42,13 @@ export class AuthController {
   async getMe(@GetUser() user: User) {
     return user;
   }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Post('logout')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Logout user' })
+  @ApiResponse({ status: 200, description: 'Successful logout' })
+  async logout() {
+    return { message: 'Logout successful' };
+  }
 }
