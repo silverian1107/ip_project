@@ -24,6 +24,23 @@ function SignUp() {
     <div className="auth-container">
       <h1 className="auth-logo">DramaSphere</h1>
       <form className="auth-form" onSubmit={handleSubmit(submitForm)}>
+        <label htmlFor="username">{t('username')}</label>
+        <input
+          {...register('username', {
+            required: t('validation.usernameRequired'),
+            minLength: {
+              value: 3,
+              message: t('validation.usernameLength')
+            }
+          })}
+          id="username"
+          type="text"
+          placeholder={t('username')}
+        />
+        {errors.username && (
+          <p className="error-message">{errors.username.message}</p>
+        )}
+
         <label htmlFor="email">{t('email')}</label>
         <input
           {...register('email', {

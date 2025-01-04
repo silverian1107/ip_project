@@ -1,6 +1,10 @@
 {
   "login": "로그인",
   "search": "검색",
-  "user_icon": "👤",
-  "community": "💬"
+  "user_icon": "사용자",
+  "community": "커뮤니티",
+  "mypage": "마이 페이지",
+  "profile": "프로필",
+  "editProfile": "프로필 수정",
+  "logout": "로그아웃"
 }

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { toast } from 'sonner';
 import Cookies from 'js-cookie';
 
-export const unauthClient = axios.create({
+export const UnauthClient = axios.create({
   baseURL: `http://localhost:3001/api/auth`,
   headers: {
     'Content-Type': 'application/json',
@@ -10,11 +10,9 @@ export const unauthClient = axios.create({
   }
 });
 
-unauthClient.interceptors.response.use(
+UnauthClient.interceptors.response.use(
   (response) => {
-    console.log('response', response);
-
-    return response;
+    return response.data;
   },
   (error) => {
     const errorMessage =
@@ -28,7 +26,7 @@ unauthClient.interceptors.response.use(
   }
 );
 
-export const AxiosClient = axios.create({
+export const AuthClient = axios.create({
   baseURL: 'http://localhost:3001/api',
   headers: {
     'Content-Type': 'application/json'
@@ -36,7 +34,7 @@ export const AxiosClient = axios.create({
   withCredentials: true
 });
 
-AxiosClient.interceptors.request.use(
+AuthClient.interceptors.request.use(
   (config) => {
     const token = Cookies.get('access_token');
     if (token) {
@@ -49,9 +47,9 @@ AxiosClient.interceptors.request.use(
   }
 );
 
-AxiosClient.interceptors.response.use(
+AuthClient.interceptors.response.use(
   (response) => {
-    return response;
+    return response.data;
   },
   (error) => {
     const errorMessage =
@@ -67,11 +65,11 @@ AxiosClient.interceptors.response.use(
 
 export const createCustomClient = (customBaseURL) => {
   const customClient = axios.create({
-    ...AxiosClient.defaults,
+    ...AuthClient.defaults,
     baseURL: customBaseURL
   });
 
-  AxiosClient.interceptors.request.forEach((interceptor) =>
+  AuthClient.interceptors.request.forEach((interceptor) =>
     customClient.interceptors.request.use(
       interceptor.fulfilled,
       interceptor.rejected

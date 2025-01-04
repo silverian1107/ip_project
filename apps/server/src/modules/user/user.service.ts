@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -42,6 +43,24 @@ export class UserService {
     return this.userRepository.findOne({
       where: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
     });
+  }
+
+  async validatePassword(
+    usernameOrEmail: string,
+    password: string,
+  ): Promise<User> {
+    const user = await this.findOneByUsernameOrEmail(usernameOrEmail);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    return user;
   }
 
   async findById(id: number): Promise<User> {

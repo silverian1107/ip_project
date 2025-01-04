@@ -6,7 +6,7 @@ import { ResponseInterceptor } from './common/interceptors/response.interceptor'
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.enableCors();
+  app.enableCors({ origin: 'http://localhost:3000', credentials: true });
   app.setGlobalPrefix('api', { exclude: [''] });
 
   app.useGlobalInterceptors(new ResponseInterceptor());

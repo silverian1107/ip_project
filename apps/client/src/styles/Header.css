@@ -3,8 +3,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between; /* 양쪽 정렬 */
-  padding: 20px;
-  background-color: #000;
+  padding: 10px;
+  background-color: #2f2f2f;
   color: #fff;
   position: relative;
   flex-wrap: wrap; /* 화면이 작아질 때 요소들이 줄어들 수 있게 설정 */
@@ -87,7 +87,7 @@
   position: absolute;
   top: 30px; /* 버튼 바로 아래에 드롭다운 배치 */
   left: 0;
-  background-color: black;
+  background-color: #2f2f2f;
   border: 1px solid #ccc;
   border-radius: 5px;
   width: 80px;

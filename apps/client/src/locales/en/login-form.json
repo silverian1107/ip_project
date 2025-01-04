@@ -1,0 +1,11 @@
+{
+  "id": "Username or Email",
+  "password": "Password",
+  "login": "Login",
+  "notMember": "Not a member yet?",
+  "signUp": "Sign Up",
+  "validation": {
+    "idRequired": "ID is required",
+    "passwordRequired": "Password is required"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "id": "이메일 또는 전화번호",
+  "password": "비밀번호",
+  "login": "로그인",
+  "notMember": "아직 회원이 아니에요?",
+  "signUp": "회원가입하기",
+  "validation": {
+    "idRequired": "아이디가 필요합니다",
+    "passwordRequired": "비밀번호가 필요합니다"
+  }
+}

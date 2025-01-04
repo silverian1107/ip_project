@@ -1,0 +1,11 @@
+{
+  "id": "Email hoặc tên đăng nhập",
+  "password": "Mật khẩu",
+  "login": "Đăng nhập",
+  "notMember": "Chưa là thành viên?",
+  "signUp": "Đăng ký",
+  "validation": {
+    "idRequired": "Cần ID",
+    "passwordRequired": "Cần mật khẩu"
+  }
+}

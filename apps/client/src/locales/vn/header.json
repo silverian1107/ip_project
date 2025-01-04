@@ -2,5 +2,9 @@
   "login": "Đăng nhập",
   "search": "Tìm kiếm",
   "user_icon": "Người dùng",
-  "community": "Cộng đồng"
+  "community": "Cộng đồng",
+  "mypage": "Trang cá nhân",
+  "profile": "Hồ sơ",
+  "editProfile": "Chỉnh sửa hồ sơ",
+  "logout": "Đăng xuất"
 }

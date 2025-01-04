@@ -1,7 +1,9 @@
-@import 'reset.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 body {
-  background-color: black;
+  background-color: #2f2f2f;
 }
 
 .app-container {
@@ -68,20 +70,12 @@ body {
   font-style: bold;
 }
 
-
-
-
-
 .navbar {
-  width:100%;
-  background-color: black;
+  width: 100%;
+  background-color: #2f2f2f;
   padding: 15px 0px;
   text-align: right;
 }
-
-
-
-
 
 /*Header*/
 .header {
@@ -89,7 +83,7 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 20px;
-  background-color: #000;
+  background-color: #2f2f2f;
   color: #fff;
 }
 
@@ -137,9 +131,6 @@ nav {
 .user-icon {
   font-size: 16px;
 }
-
-
-
 
 .auth-logo {
   font-size: 36px;
@@ -206,7 +197,6 @@ input {
   text-decoration: none;
 }
 
-
 /* 버튼 스타일 */
 .ott-button {
   background: #3a6cff; /* 버튼 배경색 */
@@ -222,7 +212,6 @@ input {
 .ott-button:hover {
   background: #2a54cc; /* 버튼 호버 효과 */
 }
-
 
 .reviews-section {
   margin-top: 30px;
@@ -267,8 +256,6 @@ input {
   line-height: 150%;
 }
 
-
-
 /* 공통 스타일 */
 .edit-button {
   cursor: pointer;
@@ -283,7 +270,9 @@ input {
   color: white;
   text-decoration: none;
   cursor: pointer;
-  transition: color 0.2s ease, text-decoration 0.2s ease;
+  transition:
+    color 0.2s ease,
+    text-decoration 0.2s ease;
 }
 
 .tab:hover {
@@ -294,15 +283,14 @@ input {
 /* 반응형 */
 @media screen and (max-width: 768px) {
   .mypage {
-      padding: 10px;
+    padding: 10px;
   }
 
   .profile-section {
-      flex-direction: column;
-      text-align: center;
+    flex-direction: column;
+    text-align: center;
   }
 }
-
 
 /* 출연진 호버 색? */
 a {

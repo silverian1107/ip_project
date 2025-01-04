@@ -1,4 +1,5 @@
 {
+  "username": "사용자 이름",
   "email": "이메일",
   "password": "비밀번호",
   "confirmPassword": "비밀번호 확인",
