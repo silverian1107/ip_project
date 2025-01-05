@@ -1,0 +1,146 @@
+[
+  {
+    "id": 10759,
+    "name": "Action & Adventure",
+    "translations": {
+      "en": "Action & Adventure",
+      "kr": "액션과 모험",
+      "vn": "Hành động & Phiêu lưu"
+    }
+  },
+  {
+    "id": 16,
+    "name": "Animation",
+    "translations": {
+      "en": "Animation",
+      "kr": "애니메이션",
+      "vn": "Hoạt hình"
+    }
+  },
+  {
+    "id": 35,
+    "name": "Comedy",
+    "translations": {
+      "en": "Comedy",
+      "kr": "코미디",
+      "vn": "Hài kịch"
+    }
+  },
+  {
+    "id": 80,
+    "name": "Crime",
+    "translations": {
+      "en": "Crime",
+      "kr": "범죄",
+      "vn": "Tội phạm"
+    }
+  },
+  {
+    "id": 99,
+    "name": "Documentary",
+    "translations": {
+      "en": "Documentary",
+      "kr": "다큐멘터리",
+      "vn": "Phim tài liệu"
+    }
+  },
+  {
+    "id": 18,
+    "name": "Drama",
+    "translations": {
+      "en": "Drama",
+      "kr": "드라마",
+      "vn": "Kịch"
+    }
+  },
+  {
+    "id": 10751,
+    "name": "Family",
+    "translations": {
+      "en": "Family",
+      "kr": "가족",
+      "vn": "Gia đình"
+    }
+  },
+  {
+    "id": 10762,
+    "name": "Kids",
+    "translations": {
+      "en": "Kids",
+      "kr": "아이들",
+      "vn": "Trẻ em"
+    }
+  },
+  {
+    "id": 9648,
+    "name": "Mystery",
+    "translations": {
+      "en": "Mystery",
+      "kr": "미스터리",
+      "vn": "Bí ẩn"
+    }
+  },
+  {
+    "id": 10763,
+    "name": "News",
+    "translations": {
+      "en": "News",
+      "kr": "뉴스",
+      "vn": "Tin tức"
+    }
+  },
+  {
+    "id": 10764,
+    "name": "Reality",
+    "translations": {
+      "en": "Reality",
+      "kr": "리얼리티",
+      "vn": "Thực tế"
+    }
+  },
+  {
+    "id": 10765,
+    "name": "Sci-Fi & Fantasy",
+    "translations": {
+      "en": "Sci-Fi & Fantasy",
+      "kr": "공상과학 & 판타지",
+      "vn": "Khoa học viễn tưởng & Thần thoại"
+    }
+  },
+  {
+    "id": 10766,
+    "name": "Soap",
+    "translations": {
+      "en": "Soap",
+      "kr": "소프 드라마",
+      "vn": "Phim truyền hình"
+    }
+  },
+  {
+    "id": 10767,
+    "name": "Talk",
+    "translations": {
+      "en": "Talk",
+      "kr": "토크쇼",
+      "vn": "Nói chuyện"
+    }
+  },
+  {
+    "id": 10768,
+    "name": "War & Politics",
+    "translations": {
+      "en": "War & Politics",
+      "kr": "전쟁과 정치",
+      "vn": "Chiến tranh & Chính trị"
+    }
+  },
+  {
+    "id": 37,
+    "name": "Western",
+    "translations": {
+      "en": "Western",
+      "kr": "서부",
+      "vn": "Miền Tây"
+    }
+  }
+]

@@ -8,6 +8,7 @@ import { AdminModule } from './modules/admin/admin.module';
 import { PostModule } from './modules/post/post.module';
 import { FollowerModule } from './modules/follower/follower.module';
 import { LikeModule } from './modules/like/like.module';
+import { GenreModule } from './modules/genre/genre.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { LikeModule } from './modules/like/like.module';
     PostModule,
     FollowerModule,
     LikeModule,
+    GenreModule,
   ],
 })
 export class AppModule {}
