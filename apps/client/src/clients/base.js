@@ -11,9 +11,7 @@ export const UnauthClient = axios.create({
 });
 
 UnauthClient.interceptors.response.use(
-  (response) => {
-    return response.data;
-  },
+  (response) => response.data,
   (error) => {
     const errorMessage =
       error.response?.data?.message ||
@@ -42,15 +40,11 @@ AuthClient.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 AuthClient.interceptors.response.use(
-  (response) => {
-    return response.data;
-  },
+  (response) => response.data,
   (error) => {
     const status = error.response?.status;
     const errorMessage =
@@ -58,12 +52,7 @@ AuthClient.interceptors.response.use(
       error.response?.statusText ||
       'An unexpected error occurred';
 
-    if (status === 401) {
-      console.warn('Unauthorized: User is not authenticated.');
-      return Promise.reject(error);
-    }
-
-    if (status === 403) {
+    if (status === 401 || status === 403) {
       return Promise.reject(error);
     }
 
@@ -73,20 +62,21 @@ AuthClient.interceptors.response.use(
   }
 );
 
-export const createCustomClient = (customBaseURL) => {
+export const createCustomClient = (customBaseURL, isAuth = true) => {
+  const baseClient = isAuth ? AuthClient : UnauthClient;
+
   const customClient = axios.create({
-    ...AuthClient.defaults,
+    ...baseClient.defaults,
     baseURL: customBaseURL
   });
 
-  AuthClient.interceptors.request.forEach((interceptor) =>
+  baseClient.interceptors.request.forEach((interceptor) =>
     customClient.interceptors.request.use(
       interceptor.fulfilled,
       interceptor.rejected
     )
   );
-
-  AuthClient.interceptors.response.forEach((interceptor) =>
+  baseClient.interceptors.response.forEach((interceptor) =>
     customClient.interceptors.response.use(
       interceptor.fulfilled,
       interceptor.rejected
@@ -95,7 +85,3 @@ export const createCustomClient = (customBaseURL) => {
 
   return customClient;
 };
-
-const UserClient = createCustomClient('http://localhost:3001/api/users');
-
-export { UserClient };

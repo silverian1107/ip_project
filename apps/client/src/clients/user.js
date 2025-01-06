@@ -1,7 +1,7 @@
-import { UserClient } from './base';
+import { UserClient } from './client';
 
 export const UserEndpoints = {
   async getProfile() {
-    return (await UserClient.get('/profile/me')).data;
+    return (await UserClient.auth().get('/profile/me')).data;
   }
 };

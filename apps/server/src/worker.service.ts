@@ -236,14 +236,14 @@ export class WorkerService {
         title: drama.name,
         titleTranslations: {
           en: dramaDetails.name,
-          ko: dramaDetails.name,
-          vi: dramaDetails.name,
+          kr: dramaDetails.name,
+          vn: dramaDetails.name,
         },
         overview: dramaDetails.overview,
         overviewTranslations: {
           en: dramaDetails.overview,
-          ko: dramaDetails.overview,
-          vi: dramaDetails.overview,
+          kr: dramaDetails.overview,
+          vn: dramaDetails.overview,
         },
         releaseDate: dramaDetails.first_air_date || null,
         adult: dramaDetails.adult,
@@ -271,12 +271,13 @@ export class WorkerService {
 
       const translations = translationsResponse.data.translations || [];
       translations.forEach((translation: any) => {
-        const { iso_639_1, data } = translation;
-        if (iso_639_1 === 'en' || iso_639_1 === 'ko' || iso_639_1 === 'vi') {
-          dramaData.titleTranslations[iso_639_1] =
-            data.title || dramaData.titleTranslations[iso_639_1];
-          dramaData.overviewTranslations[iso_639_1] =
-            data.overview || dramaData.overviewTranslations[iso_639_1];
+        const { iso_3166_1, data } = translation;
+        const lang = iso_3166_1.toLowerCase();
+        if (lang === 'en' || lang === 'kr' || lang === 'vn') {
+          dramaData.titleTranslations[lang] =
+            data.name || dramaData.titleTranslations[lang];
+          dramaData.overviewTranslations[lang] =
+            data.overview || dramaData.overviewTranslations[lang];
         }
       });
 

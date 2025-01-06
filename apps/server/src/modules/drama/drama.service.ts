@@ -33,10 +33,16 @@ export class DramaService {
     return drama;
   }
 
-  // Update a Drama by ID
   async update(id: number, updateData: Partial<Drama>): Promise<Drama> {
     const drama = await this.findById(id);
     Object.assign(drama, updateData);
     return await this.dramaRepository.save(drama);
+  }
+
+  async getPopularDramas(): Promise<Drama[]> {
+    return await this.dramaRepository.find({
+      order: { popularity: 'DESC' },
+      take: 10,
+    });
   }
 }
