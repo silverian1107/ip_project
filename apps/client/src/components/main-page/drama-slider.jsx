@@ -6,8 +6,19 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { IMG_BASE_URL } from '../MainPage';
+import LoadingSpinner from '../ui/spinner';
 
-export default function DramaSlider({ dramas, currentLanguage }) {
+export default function DramaSlider({ dramas, currentLanguage, isLoading }) {
+  if (isLoading) {
+    return (
+      <div className="w-11/12 mx-auto space-y-4 lg:w-4/5">
+        <div className="flex justify-center py-8">
+          <LoadingSpinner />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="main-image-slider">
       <Swiper

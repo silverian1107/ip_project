@@ -57,6 +57,7 @@ export class UserController {
   }
 
   @Get('profile/me')
+  @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Get current user profile' })
   @ApiResponse({ status: 200, description: 'Return current user profile.' })

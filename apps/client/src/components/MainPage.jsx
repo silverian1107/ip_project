@@ -1,73 +1,37 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { usePopularDramas } from '../hooks/queries/use-drama';
-import LoadingSpinner from './ui/spinner';
-import DramaSlider from './main-page/drama-slider';
-import DramaRankings from './main-page/drama-ranking';
+import { useNavigate } from 'react-router-dom';
+import {
+  useDramas,
+  useNewestDrama,
+  usePopularDramas
+} from '../hooks/queries/use-drama';
 import DramaList from './main-page/drama-list';
+import DramaRankings from './main-page/drama-ranking';
+import DramaSlider from './main-page/drama-slider';
+import LoadingSpinner from './ui/spinner';
 
 export const IMG_BASE_URL = 'https://image.tmdb.org/t/p/w1280/';
-const API_KEY = 'd935fbb42d754c0a19e3c947ea1e3a93';
-const BASE_URL = 'https://api.themoviedb.org/3';
+export const IMG_BASE_URL_SM = 'https://image.tmdb.org/t/p/w500/';
 
 export default function MainPage() {
   // eslint-disable-next-line no-unused-vars
-  const { t, i18n } = useTranslation();
-  const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
-  const [dramas, setDramas] = useState([]);
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
+  const { t, i18n } = useTranslation('main-page');
+  const currentLanguage = i18n.language;
   const navigate = useNavigate();
 
+  const {
+    data: dramaData,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
+  } = useDramas();
   const { data: popular, isLoading } = usePopularDramas();
+  const { data: newest, isLoading: isLoadingNewest } = useNewestDrama();
 
-  useEffect(() => {
-    const handleLanguageChange = (lang) => {
-      setCurrentLanguage(lang);
-    };
-
-    i18n.on('languageChanged', handleLanguageChange);
-    return () => {
-      i18n.off('languageChanged', handleLanguageChange);
-    };
-  }, [i18n]);
-
-  const fetchKoreanDramas = async (pageNum) => {
-    if (loading || !hasMore) return;
-
-    try {
-      setLoading(true);
-      const response = await fetch(
-        `${BASE_URL}/discover/tv?api_key=${API_KEY}` +
-          `&with_original_language=ko` +
-          `&language=ko-KR` +
-          `&with_genres=18` +
-          `&sort_by=popularity.desc` +
-          `&page=${pageNum}`
-      );
-      const data = await response.json();
-
-      if (data && Array.isArray(data.results)) {
-        setDramas((prev) =>
-          pageNum === 1 ? data.results : [...prev, ...data.results]
-        );
-        if (data.page >= data.total_pages) setHasMore(false);
-      }
-    } catch (error) {
-      console.error('Error fetching dramas:', error);
-    } finally {
-      setLoading(false);
-    }
+  const onClickDramaItem = (drama) => {
+    navigate(`/drama/${drama.name}`, { state: drama });
   };
-
-  useEffect(() => {
-    fetchKoreanDramas(1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  console.log(currentLanguage);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -75,32 +39,48 @@ export default function MainPage() {
         window.innerHeight + document.documentElement.scrollTop >=
         document.documentElement.offsetHeight - 1000
       ) {
-        if (!loading && hasMore) {
-          setPage((prev) => prev + 1);
-          fetchKoreanDramas(page + 1);
+        if (hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
         }
       }
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, loading, hasMore]);
-
-  const onClickDramaItem = (drama) => {
-    navigate(`/drama/${drama.name}`, { state: drama });
-  };
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   if (isLoading) {
     return <LoadingSpinner />;
   }
 
+  const allDramas = dramaData?.pages.flatMap((page) => page.data) || [];
+
   return (
     <div className="space-y-4">
-      <DramaSlider dramas={popular} currentLanguage={currentLanguage} />
-      <DramaRankings dramas={popular} onClickDramaItem={onClickDramaItem} />
-      <DramaList dramas={dramas} onClickDramaItem={onClickDramaItem} />
-      {loading && <div className="loading">Loading...</div>}
+      <DramaSlider
+        isLoading={isLoading}
+        dramas={popular}
+        currentLanguage={currentLanguage}
+      />
+      <DramaRankings
+        title="popular"
+        dramas={popular}
+        badge
+        isLoading={isLoading}
+        onClickDramaItem={onClickDramaItem}
+      />
+      <DramaRankings
+        title="newest"
+        dramas={newest}
+        isLoading={isLoadingNewest}
+        onClickDramaItem={onClickDramaItem}
+      />
+      <DramaList
+        title={t('discover')}
+        dramas={allDramas}
+        onClickDramaItem={onClickDramaItem}
+      />
+      {isFetchingNextPage && <div className="loading">Loading...</div>}
     </div>
   );
 }

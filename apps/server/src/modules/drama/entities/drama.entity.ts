@@ -22,7 +22,7 @@ export class Drama {
   @Column('jsonb', { nullable: false })
   overviewTranslations: { [key: string]: string };
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ type: Date, nullable: true })
   releaseDate: string;
 
   @Column({ type: 'boolean', default: false })

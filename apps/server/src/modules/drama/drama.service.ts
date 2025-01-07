@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Drama } from './entities/drama.entity';
+import { PaginationQuery } from 'src/common/dto/pagination-query.dto';
+import { paginateEntities } from 'src/common/utils/paginate-entities';
 
 @Injectable()
 export class DramaService {
@@ -44,5 +46,20 @@ export class DramaService {
       order: { popularity: 'DESC' },
       take: 10,
     });
+  }
+
+  async getNewestDramas(): Promise<Drama[]> {
+    return await this.dramaRepository.find({
+      order: { releaseDate: 'DESC' },
+      take: 25,
+    });
+  }
+
+  async getDramas(pagination: PaginationQuery) {
+    const queryBuilder = this.dramaRepository
+      .createQueryBuilder('drama')
+      .orderBy('drama.releaseDate', 'DESC');
+
+    return await paginateEntities(queryBuilder, pagination);
   }
 }
