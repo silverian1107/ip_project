@@ -18,4 +18,13 @@ const DramaClient = {
   }
 };
 
-export { UserClient, DramaClient };
+const ReviewClient = {
+  auth: () => {
+    return createCustomClient('http://localhost:3001/api/review', true);
+  },
+  unauth: () => {
+    return createCustomClient('http://localhost:3001/api/review', false);
+  }
+};
+
+export { UserClient, DramaClient, ReviewClient };

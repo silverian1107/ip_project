@@ -18,7 +18,10 @@ export class DramaService {
   }
 
   async findById(id: number): Promise<Drama> {
-    const drama = await this.dramaRepository.findOneBy({ id });
+    const drama = await this.dramaRepository.findOne({
+      where: { id },
+      relations: ['reviews', 'reviews.user'],
+    });
     if (!drama) {
       throw new Error('Drama not found');
     }

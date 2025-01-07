@@ -1,5 +1,6 @@
 import { Like } from 'src/modules/like/entities/like.entity';
 import { Post } from 'src/modules/post/entities/post.entity';
+import { Review } from 'src/modules/review/entities/review.entitiy';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -66,4 +67,7 @@ export class Drama {
 
   @Column({ type: 'int', default: 0 })
   likeCount: number;
+
+  @OneToMany(() => Review, (review) => review.drama)
+  reviews: Review[];
 }

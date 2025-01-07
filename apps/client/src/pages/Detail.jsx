@@ -1,60 +1,56 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { useLocation, Link, useParams } from 'react-router-dom';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import YouTube from 'react-youtube'; // YouTube 트레일러 표시
-import '../styles/Detail.css';
 import { useDrama } from '../hooks/queries/use-drama';
+import { useTranslation } from 'react-i18next';
+import '../styles/Detail.css';
+import TrailerBanner from '../components/detail/TrailerBanner';
+import OTTSection from '../components/detail/OTTSection';
+import DramaInfo from '../components/detail/DramaInfo';
+import CastSection from '../components/detail/CastSection';
+import HighlightsSection from '../components/detail/HighlightsSection';
+import ReviewsSection from '../components/detail/ReviewsSection';
 
 const API_KEY = 'd935fbb42d754c0a19e3c947ea1e3a93';
 const BASE_URL = 'https://api.themoviedb.org/3';
-const IMG_BASE_URL = 'https://image.tmdb.org/t/p/w500/';
 
 export default function Detail() {
   const param = useParams();
   const { data: drama, isLoading, isError } = useDrama(param.id);
+  const { i18n } = useTranslation();
+  const currentLanguage = i18n.language;
 
   const [details, setDetails] = useState(null);
   const [trailer, setTrailer] = useState('');
   const [highlights, setHighlights] = useState([]);
   const [cast, setCast] = useState([]);
-  const [reviews, setReviews] = useState([]);
-  const [newReview, setNewReview] = useState('');
   const [showInfo, setShowInfo] = useState(false);
   const [crew, setCrew] = useState([]);
   const [ottProviders, setOTTProviders] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
-  const playerRef = useRef(null);
 
   const toggleFavorite = () => {
-    setIsFavorite((prev) => !prev); // 상태를 토글
+    setIsFavorite((prev) => !prev);
   };
 
   const fetchOTTProviders = async (id) => {
     try {
-      const response = await axios.get(
-        `${BASE_URL}/tv/${drama.tmdbId}/watch/providers`,
-        {
-          params: { api_key: API_KEY }
-        }
-      );
+      const response = await axios.get(`${BASE_URL}/tv/${id}/watch/providers`, {
+        params: { api_key: API_KEY }
+      });
 
-      const providers = response.data.results.KR; // 한국 지역 OTT 정보 가져오기
+      const providers = response.data.results.KR;
       if (providers && providers.flatrate) {
-        setOTTProviders(providers.flatrate); // 사용 가능한 OTT 데이터 저장
+        setOTTProviders(providers.flatrate);
       } else {
-        setOTTProviders([]); // OTT 데이터가 없을 경우 빈 배열
+        setOTTProviders([]);
       }
     } catch (error) {
       console.error('Error fetching OTT providers:', error);
-      setOTTProviders([]); // 에러 발생 시 빈 데이터
+      setOTTProviders([]);
     }
   };
 
-  // // 드라마 세부 정보 가져오기
   const fetchDetails = async (id) => {
     try {
       const response = await axios.get(`${BASE_URL}/tv/${id}`, {
@@ -66,21 +62,18 @@ export default function Detail() {
     }
   };
 
-  // 트레일러 정보 가져오기
   const fetchTrailer = async (id) => {
     try {
       const response = await axios.get(`${BASE_URL}/tv/${id}/videos`, {
         params: { api_key: API_KEY, language: 'ko-KR' }
       });
 
-      // 한국어 트레일러 및 티저 찾기
       let trailerVideo = response.data.results.find(
         (video) =>
           (video.type === 'Trailer' || video.type === 'Teaser') &&
           video.iso_639_1 === 'ko'
       );
 
-      // 한국어 트레일러가 없으면 기본 영어 버전을 찾기
       if (!trailerVideo) {
         const fallbackResponse = await axios.get(
           `${BASE_URL}/tv/${id}/videos`,
@@ -93,41 +86,16 @@ export default function Detail() {
         );
       }
 
-      // 트레일러 ID 설정
       if (trailerVideo) {
         setTrailer(trailerVideo.key);
       } else {
-        setTrailer(null); // 영상이 없는 경우
+        setTrailer(null);
       }
     } catch (error) {
       console.error('Error fetching trailer:', error);
     }
   };
 
-  const onPlayerReady = (event) => {
-    playerRef.current = event.target; // 유튜브 플레이어 인스턴스 저장
-  };
-
-  const handleTrailerClick = (event) => {
-    // 클릭이 찜 버튼에서 발생한 경우 전체화면을 막음
-    if (event.target.closest('.favorite-button')) {
-      return; // 찜 버튼 클릭 시에는 아무 동작도 하지 않음
-    }
-
-    if (playerRef.current) {
-      playerRef.current.playVideo(); // 클릭 시 영상 재생
-      const iframe = playerRef.current.getIframe();
-      iframe.requestFullscreen(); // 전체 화면 모드로 전환
-    }
-  };
-
-  const onStateChange = (event) => {
-    if (event.data === 0) {
-      console.log('영상이 끝났습니다.'); // 재생 종료 시 추가 작업 가능
-    }
-  };
-
-  // 출연진, 제작진 정보 가져오기
   const fetchCastAndCrew = async (id) => {
     try {
       const response = await axios.get(`${BASE_URL}/tv/${id}/credits`, {
@@ -135,7 +103,6 @@ export default function Detail() {
       });
       setCast(response.data.cast);
 
-      // 제작진 정보 중 주요 인물만 필터링
       const filteredCrew = response.data.crew.filter(
         (member) =>
           member.job === 'Director' ||
@@ -178,7 +145,6 @@ export default function Detail() {
     }
   };
 
-  // 모든 데이터를 가져오는 함수
   const fetchAllData = async () => {
     await fetchDetails(drama.tmdbId);
     await fetchTrailer(drama.tmdbId);
@@ -186,121 +152,31 @@ export default function Detail() {
     await fetchCastAndCrew(drama.tmdbId);
   };
 
-  // 컴포넌트 마운트 시 데이터 가져오기
   useEffect(() => {
     if (!drama?.tmdbId) return;
 
     fetchAllData();
     fetchOTTProviders(drama.tmdbId);
     window.scrollTo(0, 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [drama?.tmdbId]);
 
-  // 새 리뷰 추가
-  const handleAddReview = () => {
-    if (newReview.content.trim() === '' || newReview.rating === 0) return; // 내용과 별점이 모두 입력되어야 함
-    const newReviewObj = {
-      id: Date.now(),
-      author: '익명',
-      content: newReview.content,
-      rating: newReview.rating
-    };
-    setReviews((prev) => [...prev, newReviewObj]);
-    setNewReview({ content: '', rating: 0, hoverRating: 0 }); // 입력 필드 초기화
-  };
-
-  const handleStarClick = (rating) => {
-    setNewReview((prev) => ({
-      ...prev,
-      rating: prev.rating === rating ? 0 : rating
-    }));
-  };
-
-  const handleMouseEnter = (rating) => {
-    setNewReview((prev) => ({ ...prev, hoverRating: rating }));
-  };
-
-  const handleMouseLeave = () => {
-    setNewReview((prev) => ({ ...prev, hoverRating: 0 }));
-  };
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error loading drama details</div>;
 
   return (
     <div className="page-container">
-      {/* 상단 배너 */}
-      {trailer ? (
-        <div className="trailer-banner" onClick={handleTrailerClick}>
-          <YouTube
-            videoId={trailer}
-            className="trailer-video"
-            opts={{
-              width: '100%',
-              height: '450px',
-              playerVars: { autoplay: 1, mute: 1 } // 자동 재생 및 음소거
-            }}
-            onReady={onPlayerReady}
-            onStateChange={onStateChange}
-          />
-          <div className="overlay">
-            <div className="title-info">
-              <h1>{details.name || details.original_name}</h1>
-              <p>
-                <strong>☆</strong> {details.vote_average}
-              </p>
-              <p>
-                <span
-                  onClick={toggleFavorite}
-                  className="favorite-button"
-                  style={{
-                    cursor: 'pointer',
-                    fontSize: '1.5rem',
-                    color: isFavorite ? 'white' : 'gray'
-                  }}
-                >
-                  {isFavorite ? '⚑' : '⚐'}
-                </span>
-                <span style={{ marginLeft: '8px' }}>찜</span>
-              </p>
-            </div>
-          </div>
-        </div>
-      ) : (
-        details && (
-          <div
-            className="trailer-placeholder"
-            style={{
-              backgroundImage: `url(${IMG_BASE_URL}${details.backdrop_path})`,
-              backgroundSize: 'cover',
-              height: '450px'
-            }}
-          ></div>
-        )
-      )}
+      <TrailerBanner
+        trailer={trailer}
+        drama={drama}
+        details={details}
+        isFavorite={isFavorite}
+        toggleFavorite={toggleFavorite}
+        currentLanguage={currentLanguage}
+      />
 
-      {/* OTT Platforms */}
-      <div className="ott-section">
-        <h2>OTT Platforms</h2>
-        <div className="ott-links">
-          {ottProviders.length > 0 ? (
-            ottProviders.map((provider, index) => (
-              <div key={index} className="ott-item">
-                <div className="ott-info">
-                  <p>{provider.provider_name}</p>
-                  {/* Platform name provided by TMDB */}
-                </div>
-                <button
-                  className="ott-button"
-                  onClick={() => window.open(provider.link, '_blank')}
-                >
-                  Watch Now
-                </button>
-              </div>
-            ))
-          ) : (
-            <p>No OTT platform information available.</p>
-          )}
-        </div>
-      </div>
+      <OTTSection ottProviders={ottProviders} />
 
-      {/* Drama Information Toggle Button */}
       <div className="toggle-info-section">
         <span className="toggle-info-text">Drama Information</span>
         <button
@@ -312,172 +188,20 @@ export default function Detail() {
         </button>
       </div>
 
-      {/* Drama Information */}
       {showInfo && details && (
-        <div className="drama-info">
-          <p>
-            <strong>Network:</strong>{' '}
-            {details.networks && details.networks.length > 0
-              ? details.networks.map((network) => network.name).join(', ')
-              : 'No information available'}
-          </p>
-          <p>
-            <strong>Air Date:</strong>{' '}
-            {details.first_air_date
-              ? details.last_air_date &&
-                details.last_air_date !== details.first_air_date
-                ? `${details.first_air_date} ~ ${details.last_air_date}` // Start date ~ End date
-                : `${details.first_air_date} (Ongoing)` // Only show start date, mark as ongoing
-              : 'No information available'}
-          </p>
-
-          <p>
-            <strong>Genre:</strong>{' '}
-            {details.genres && details.genres.length > 0
-              ? details.genres.map((genre) => genre.name).join(', ')
-              : 'No information available'}
-          </p>
-          <p>
-            <strong>Overview:</strong>{' '}
-            {details.overview || 'No information available'}
-          </p>
-          <p>
-            <strong>Production Companies:</strong>{' '}
-            {details.production_companies &&
-            details.production_companies.length > 0
-              ? details.production_companies
-                  .map((company) => company.name)
-                  .join(', ')
-              : 'No information available'}
-          </p>
-          <p>
-            <strong>Cast & Crew:</strong>
-          </p>
-          <ul>
-            {crew && crew.length > 0 ? (
-              crew.map((member) => (
-                <li key={member.credit_id}>
-                  {member.name} ({member.job})
-                </li>
-              ))
-            ) : (
-              <li>No crew information available.</li>
-            )}
-          </ul>
-        </div>
+        <DramaInfo
+          details={details}
+          drama={drama}
+          currentLanguage={currentLanguage}
+          crew={crew}
+        />
       )}
 
-      {/* Cast */}
-      <div className="drama-cast">
-        <h2>Cast</h2>
-        <div className="cast-slider">
-          {cast.length > 0 ? (
-            cast.map((member) => (
-              <Link
-                to={`/actor/${member.id}`}
-                key={member.id}
-                className="cast-card"
-              >
-                <img
-                  className="cast-image"
-                  src={
-                    member.profile_path
-                      ? `${IMG_BASE_URL}${member.profile_path}`
-                      : 'https://via.placeholder.com/100x100?text=No+Image'
-                  }
-                  alt={member.name}
-                />
-                <p className="cast-name">{member.name}</p>
-                <p className="cast-character">
-                  {member.character || 'No character information available'}
-                </p>
-              </Link>
-            ))
-          ) : (
-            <p>No cast information available.</p>
-          )}
-        </div>
-      </div>
+      <CastSection cast={cast} />
 
-      {/* Highlights */}
-      <div className="highlights-section">
-        <h2>Highlights</h2>
-        <Swiper
-          modules={[Navigation]}
-          spaceBetween={20}
-          slidesPerView={4}
-          navigation
-          className="highlights-swiper"
-        >
-          {highlights.map((video) => (
-            <SwiperSlide key={video.key}>
-              <div className="highlight-video">
-                <YouTube
-                  videoId={video.key}
-                  opts={{
-                    width: '100%',
-                    height: '200',
-                    playerVars: {
-                      autoplay: 0
-                    }
-                  }}
-                />
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
+      <HighlightsSection highlights={highlights} />
 
-      {/* Reviews Section */}
-      <div className="reviews-section">
-        <h2>Reviews</h2>
-        {reviews.length > 0 ? (
-          reviews.map((review) => (
-            <div className="review" key={review.id}>
-              <h3>{review.author}</h3>
-              <p>
-                Rating:{' '}
-                {'★'.repeat(review.rating) + '☆'.repeat(5 - review.rating)}
-              </p>
-              <p>{review.content}</p>
-            </div>
-          ))
-        ) : (
-          <p>No reviews available.</p>
-        )}
-
-        <div className="add-review">
-          <div className="star-rating">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <span
-                key={star}
-                className={
-                  newReview.hoverRating >= star || newReview.rating >= star
-                    ? 'star selected'
-                    : 'star'
-                }
-                onClick={() => handleStarClick(star)}
-                onMouseEnter={() => handleMouseEnter(star)}
-                onMouseLeave={handleMouseLeave}
-                role="button"
-                aria-label={`${star} star selected`}
-              >
-                {newReview.hoverRating >= star || newReview.rating >= star
-                  ? '★'
-                  : '☆'}
-              </span>
-            ))}
-          </div>
-          <textarea
-            placeholder="Write your review..."
-            value={newReview.content}
-            onChange={(e) =>
-              setNewReview((prev) => ({ ...prev, content: e.target.value }))
-            }
-          />
-          <button onClick={handleAddReview}>Submit Review</button>
-        </div>
-      </div>
+      <ReviewsSection id={drama.id} reviews={drama.reviews} />
     </div>
   );
 }
