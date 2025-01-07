@@ -2,10 +2,10 @@ import { createCustomClient } from './base';
 
 const UserClient = {
   auth: () => {
-    return createCustomClient('http://localhost:3001/api/auth', true);
+    return createCustomClient('http://localhost:3001/api/users', true);
   },
   unauth: () => {
-    return createCustomClient('http://localhost:3001/api/auth', false);
+    return createCustomClient('http://localhost:3001/api/users', false);
   }
 };
 

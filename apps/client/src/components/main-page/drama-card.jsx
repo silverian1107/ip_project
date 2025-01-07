@@ -2,17 +2,21 @@ import { Heart } from 'lucide-react';
 import React, { useState } from 'react';
 import { IMG_BASE_URL } from '../MainPage';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 export default function DramaCard({ drama, onClickDramaItem, onLike }) {
   const { i18n } = useTranslation();
   const currentLanguage = i18n.language;
+  const navigation = useNavigate();
 
   const [isHovered, setIsHovered] = useState(false);
+  console.log();
 
   return (
     <div
       className="relative aspect-[2/3] overflow-hidden rounded-lg shadow-md transition-transform hover:scale-105 cursor-pointer"
-      onClick={() => onClickDramaItem(drama)}
+      // onClick={() => console.log(drama)}
+      onClick={() => navigation(`/drama/${drama.id}`)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

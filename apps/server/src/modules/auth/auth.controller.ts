@@ -35,7 +35,7 @@ export class AuthController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('me')
+  @Get('profile/me')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get current user' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })

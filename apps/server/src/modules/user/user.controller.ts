@@ -18,6 +18,7 @@ import { GetUser } from 'src/common/decorators/get-user.decorator';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
+import { AdminAuthGuard } from '../auth/guards/admin-auth.guard';
 
 @ApiTags('users')
 @Controller('users')
@@ -63,5 +64,13 @@ export class UserController {
   @ApiResponse({ status: 200, description: 'Return current user profile.' })
   getCurrentUserProfile(@GetUser('id') id: number) {
     return this.userService.getCurrentUserProfile(id);
+  }
+
+  @Get()
+  @UseGuards(AuthGuard('jwt'), AdminAuthGuard)
+  @ApiOperation({ summary: 'Get all users' })
+  @ApiResponse({ status: 200, description: 'Return all users.' })
+  findAll() {
+    return this.userService.findAll();
   }
 }

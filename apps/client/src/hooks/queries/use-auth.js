@@ -22,7 +22,7 @@ export const useAccount = () => {
   return useQuery({
     queryKey: ['account'],
     queryFn: async () => {
-      const response = await AuthClient.get('/auth/me');
+      const response = await AuthClient.get('/users/profile/me');
       return response.data;
     },
     enabled: !!token,
