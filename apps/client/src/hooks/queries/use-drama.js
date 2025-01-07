@@ -18,6 +18,16 @@ export const useDramas = () => {
   });
 };
 
+export const useDrama = (id) => {
+  return useQuery({
+    queryKey: ['drama', id],
+    queryFn: async () => {
+      const response = await DramaEndpoints.getDrama(id);
+      return response;
+    }
+  });
+};
+
 export const usePopularDramas = () => {
   return useQuery({
     queryKey: ['popular-dramas'],

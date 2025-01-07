@@ -45,7 +45,7 @@ function App() {
               element={<Community profile={profile} />}
             />
 
-            <Route path="/drama/:name" element={<Detail />} />
+            <Route path="/drama/:id" element={<Detail />} />
             <Route path="/actor/:id" element={<ActorFilmography />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />

@@ -11,5 +11,13 @@ export const DramaEndpoints = {
 
   getNewest: async () => {
     return (await DramaClient.unauth().get('/newest')).data;
+  },
+
+  getDetail: async (id) => {
+    return (await DramaClient.unauth().get(`/${id}`)).data;
+  },
+
+  getDrama: async (id) => {
+    return (await DramaClient.unauth().get(`/${id}`)).data;
   }
 };

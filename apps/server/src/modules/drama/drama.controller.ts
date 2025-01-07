@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { PaginationQuery } from 'src/common/dto/pagination-query.dto';
 import { DramaService } from './drama.service';
@@ -16,6 +16,11 @@ export class DramaController {
   @Get('newest')
   async getNewestDramas() {
     return await this.dramaService.getNewestDramas();
+  }
+
+  @Get(':id')
+  async getDrama(@Param('id') id: number) {
+    return await this.dramaService.findById(id);
   }
 
   @Get()
