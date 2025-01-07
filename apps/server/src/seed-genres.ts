@@ -28,7 +28,6 @@ async function bootstrap() {
     { id: 37, name: 'Western' },
   ];
 
-  console.log('Adding genres to the database...');
   const genreEntities = genres.map((genre) => {
     const entity = new Genre();
     entity.tmdbId = genre.id;
@@ -38,7 +37,6 @@ async function bootstrap() {
 
   // Save all genres, skipping duplicates
   await genreRepository.save(genreEntities, { chunk: 50 });
-  console.log('Genres added successfully!');
 
   await app.close();
 }

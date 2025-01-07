@@ -28,6 +28,16 @@ export const useDrama = (id) => {
   });
 };
 
+export const useIsLikedDrama = (dramaId) => {
+  return useQuery({
+    queryKey: ['is-liked-drama', dramaId],
+    queryFn: async () => {
+      const response = await DramaEndpoints.isLiked(dramaId);
+      return response;
+    }
+  });
+};
+
 export const usePopularDramas = () => {
   return useQuery({
     queryKey: ['popular-dramas'],

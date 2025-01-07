@@ -19,8 +19,6 @@ function Header() {
     setIsDropdownOpen(false);
   };
 
-  console.log(account);
-
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };

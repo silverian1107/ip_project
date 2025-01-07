@@ -10,12 +10,10 @@ export default function DramaCard({ drama, onClickDramaItem, onLike }) {
   const navigation = useNavigate();
 
   const [isHovered, setIsHovered] = useState(false);
-  console.log();
 
   return (
     <div
       className="relative aspect-[2/3] overflow-hidden rounded-lg shadow-md transition-transform hover:scale-105 cursor-pointer"
-      // onClick={() => console.log(drama)}
       onClick={() => navigation(`/drama/${drama.id}`)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

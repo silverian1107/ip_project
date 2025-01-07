@@ -1,6 +1,6 @@
 import { createCustomClient } from './base';
 
-const UserClient = {
+export const UserClient = {
   auth: () => {
     return createCustomClient('http://localhost:3001/api/users', true);
   },
@@ -9,7 +9,7 @@ const UserClient = {
   }
 };
 
-const DramaClient = {
+export const DramaClient = {
   auth: () => {
     return createCustomClient('http://localhost:3001/api/dramas', true);
   },
@@ -18,7 +18,7 @@ const DramaClient = {
   }
 };
 
-const ReviewClient = {
+export const ReviewClient = {
   auth: () => {
     return createCustomClient('http://localhost:3001/api/review', true);
   },
@@ -27,4 +27,11 @@ const ReviewClient = {
   }
 };
 
-export { UserClient, DramaClient, ReviewClient };
+export const LikeClient = {
+  auth: () => {
+    return createCustomClient('http://localhost:3001/api/likes', true);
+  },
+  unauth: () => {
+    return createCustomClient('http://localhost:3001/api/likes', false);
+  }
+};

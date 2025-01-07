@@ -1,7 +1,17 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { PaginationQuery } from 'src/common/dto/pagination-query.dto';
 import { DramaService } from './drama.service';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/common/decorators/get-user.decorator';
+import { User } from '../user/entities/user.entity';
 
 @ApiTags('dramas')
 @Controller('dramas')
@@ -24,8 +34,14 @@ export class DramaController {
   }
 
   @Get()
-  @ApiBearerAuth()
   async getDramas(@Query() pagination: PaginationQuery) {
     return await this.dramaService.getDramas(pagination);
+  }
+
+  @Get('isLiked/:id')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  async isLiked(@Param('id', ParseIntPipe) id: number, @GetUser() user: User) {
+    return await this.dramaService.isLiked(id, user.id);
   }
 }

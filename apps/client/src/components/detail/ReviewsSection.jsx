@@ -24,8 +24,6 @@ export default function ReviewsSection({ id, reviews }) {
   const handleAddReview = async () => {
     if (newReview.content.trim() === '' || newReview.rating === 0) return;
 
-    console.log(user);
-
     const newReviewObj = {
       author: user?.username || '익명',
       content: newReview.content,
@@ -97,8 +95,6 @@ export default function ReviewsSection({ id, reviews }) {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-
-  console.log(reviews);
 
   return (
     <div className="p-6 text-white rounded-lg">

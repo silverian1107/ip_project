@@ -1,14 +1,13 @@
-import { Controller, Post, Param } from '@nestjs/common';
-import { LikeService } from './like.service';
+import { Controller, Param, Post, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import {
-  ApiTags,
+  ApiBearerAuth,
   ApiOperation,
   ApiResponse,
-  ApiBearerAuth,
+  ApiTags,
 } from '@nestjs/swagger';
-import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/common/decorators/get-user.decorator';
+import { LikeService } from './like.service';
 
 @ApiTags('likes')
 @Controller('likes')
@@ -42,8 +41,8 @@ export class LikeController {
   @ApiResponse({ status: 404, description: 'Drama or user not found.' })
   async toggleDramaLike(
     @GetUser('id') userId: number,
-    @Param('dramaId') dramaId: number,
+    @Param('dramaId') dramaId: string,
   ) {
-    return this.likeService.toggleLikeDrama(userId, dramaId);
+    return this.likeService.toggleLikeDrama(userId, +dramaId);
   }
 }

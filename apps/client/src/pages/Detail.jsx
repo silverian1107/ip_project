@@ -10,6 +10,7 @@ import DramaInfo from '../components/detail/DramaInfo';
 import CastSection from '../components/detail/CastSection';
 import HighlightsSection from '../components/detail/HighlightsSection';
 import ReviewsSection from '../components/detail/ReviewsSection';
+import TitleSection from '../components/detail/TitleSection';
 
 const API_KEY = 'd935fbb42d754c0a19e3c947ea1e3a93';
 const BASE_URL = 'https://api.themoviedb.org/3';
@@ -166,6 +167,10 @@ export default function Detail() {
 
   return (
     <div className="page-container">
+      <TitleSection
+        dramaId={drama.id}
+        title={drama.titleTranslations[currentLanguage]}
+      />
       <TrailerBanner
         trailer={trailer}
         drama={drama}

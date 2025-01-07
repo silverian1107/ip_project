@@ -19,5 +19,9 @@ export const DramaEndpoints = {
 
   getDrama: async (id) => {
     return (await DramaClient.unauth().get(`/${id}`)).data;
+  },
+
+  isLiked: async (id) => {
+    return (await DramaClient.auth().get(`/isLiked/${id}`)).data;
   }
 };
