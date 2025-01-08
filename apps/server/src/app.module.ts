@@ -11,6 +11,7 @@ import { LikeModule } from './modules/like/like.module';
 import { GenreModule } from './modules/genre/genre.module';
 import { ReviewModule } from './modules/review/review.module';
 import { BookmarkModule } from './modules/bookmark/bookmark.module';
+import { SearchModule } from './modules/search/search.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { BookmarkModule } from './modules/bookmark/bookmark.module';
     GenreModule,
     ReviewModule,
     BookmarkModule,
+    SearchModule,
   ],
 })
 export class AppModule {}
