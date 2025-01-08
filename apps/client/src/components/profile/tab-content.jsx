@@ -8,7 +8,7 @@ export default function TabContent({ activeTab, dramas }) {
         {dramas.map((drama, index) => (
           <div
             key={index}
-            className="overflow-hidden transition-transform bg-gray-800 rounded-lg shadow-lg hover:scale-105"
+            className="overflow-hidden transition-transform rounded-lg shadow-lg bg-gray-800/80 hover:scale-105"
           >
             <img
               src={drama.image}

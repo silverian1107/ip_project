@@ -36,7 +36,7 @@ export default function MyPage() {
   }
 
   return (
-    <div className="min-h-screen text-white bg-gray-900">
+    <div className="min-h-screen text-white bg-gray-900/20">
       <div className="container px-4 py-8 mx-auto">
         <ProfileHeader profile={account} />
 
