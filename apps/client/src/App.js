@@ -14,9 +14,9 @@ import QueryProvider from './libs/react-query-provider';
 import { Toaster } from 'sonner';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './i18n';
+import Search from './pages/SearchPage';
 
 function App() {
-  // 프로필 정보를 상태로 관리
   const [profile, setProfile] = useState({
     name: '닉네임',
     email: 'oooooo@gmail.com',
@@ -32,7 +32,6 @@ function App() {
           <Header />
           <Routes>
             <Route path="/" element={<MainPage />} />
-            {/* MyPage와 EditProfile에 profile과 setProfile을 전달 */}
             <Route path="/mypage" element={<MyPage profile={profile} />} />
             <Route
               path="/edit-profile"
@@ -49,6 +48,7 @@ function App() {
             <Route path="/actor/:id" element={<ActorFilmography />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/search" element={<Search />} />
           </Routes>
         </BrowserRouter>
         <Toaster position="bottom-right" />

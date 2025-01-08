@@ -1,23 +1,18 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import '../styles/Header.css';
-import { useAccount, useLogout } from '../hooks/queries/use-auth';
+import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
+import { useAccount } from '../hooks/queries/use-auth';
+import '../styles/Header.css';
+import SearchBar from './ui/search-bar';
+import { ChevronDown } from 'lucide-react';
 
-function Header() {
-  const { t, i18n } = useTranslation('header');
-  const { data: account, isLoading, isError } = useAccount();
-
-  const logout = useLogout();
-
+const Header = () => {
+  const { t } = useTranslation('header');
+  const { account, logout, isLoading, isError } = useAccount();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
-
-  const handleLanguageChange = (lang) => {
-    i18n.changeLanguage(lang.toLowerCase());
-    setIsDropdownOpen(false);
-  };
+  const i18n = useTranslation().i18n;
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -27,33 +22,40 @@ function Header() {
     setIsProfileDropdownOpen(!isProfileDropdownOpen);
   };
 
+  const handleLanguageChange = (lang) => {
+    i18n.changeLanguage(lang.toLowerCase());
+    setIsDropdownOpen(false);
+  };
+
   return (
-    <div className="header">
-      <div className="nav-left">
-        <Link className="user-icon" to="/mypage" title={t('mypage')}>
-          👤
+    <header className="z-50 flex items-center justify-between p-4 mx-auto overflow-visible text-white md:w-4/5">
+      <div className="flex items-center space-x-4">
+        <Link to="/" className="text-xl font-bold">
+          Drama<span className="text-blue-500">Sphere</span>
         </Link>
-        <Link className="community" to="/community">
+        <Link to="/community" className="hover:text-blue-300">
           {t('community')}
         </Link>
       </div>
 
-      <Link className="logo" to="/">
-        Drama<span className="text-blue-500">Sphere</span>
-      </Link>
+      <div className="flex items-center space-x-4">
+        <SearchBar variant="header" />
 
-      <div className="nav-right">
-        <div className="relative language-selector">
-          <span className="cursor-pointer language" onClick={toggleDropdown}>
-            {i18n.language.toUpperCase()} ▼
+        <div className="relative">
+          <span
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={toggleDropdown}
+          >
+            {i18n.language.toUpperCase()}
+            <ChevronDown size={16} />
           </span>
 
           {isDropdownOpen && (
-            <div className="absolute right-0 w-32 mt-2 text-black bg-white rounded-md shadow-lg dropdown">
+            <div className="absolute right-0 z-50 w-32 mt-2 text-black bg-white rounded-md shadow-lg">
               {['KR', 'EN', 'VN'].map((lang) => (
                 <span
                   key={lang}
-                  className="block px-4 py-2 cursor-pointer dropdown-item hover:bg-gray-200"
+                  className="block px-4 py-2 cursor-pointer hover:bg-gray-200"
                   onClick={() => handleLanguageChange(lang)}
                 >
                   {lang}
@@ -63,14 +65,8 @@ function Header() {
           )}
         </div>
 
-        <input
-          type="text"
-          placeholder={t('search')}
-          className="px-4 py-2 text-black rounded-md search-bar"
-        />
-
         {!isLoading && !isError && account ? (
-          <div className="relative px-4 py-2 rounded-md hover:bg-gray-900">
+          <div className="relative">
             <div
               className="flex items-center cursor-pointer"
               onClick={toggleProfileDropdown}
@@ -83,7 +79,7 @@ function Header() {
               <span>{account.username} ▼</span>
             </div>
             {isProfileDropdownOpen && (
-              <div className="absolute right-0 w-48 mt-2 overflow-hidden text-black bg-white rounded-md shadow-lg">
+              <div className="absolute right-0 z-50 w-48 mt-2 text-black bg-white rounded-md shadow-lg">
                 <Link
                   to="/mypage"
                   className="block px-4 py-2 hover:bg-gray-200"
@@ -91,8 +87,8 @@ function Header() {
                 >
                   {t('viewProfile')}
                 </Link>
-                <Link
-                  className="block px-4 py-2 hover:bg-gray-200"
+                <button
+                  className="block w-full px-4 py-2 text-left hover:bg-gray-200"
                   onClick={() => {
                     logout();
                     toast.success('Logged out');
@@ -100,18 +96,21 @@ function Header() {
                   }}
                 >
                   {t('logout')}
-                </Link>
+                </button>
               </div>
             )}
           </div>
         ) : (
-          <Link className="navbarMenu" to="/login">
+          <Link
+            to="/login"
+            className="flex hover:text-blue-300 w-[124px] text-right"
+          >
             {t('login')}
           </Link>
         )}
       </div>
-    </div>
+    </header>
   );
-}
+};
 
 export default Header;

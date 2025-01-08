@@ -14,7 +14,7 @@ export default function DramaSlider({ dramas, currentLanguage, isLoading }) {
 
   if (isLoading) {
     return (
-      <div className="w-11/12 mx-auto space-y-4 lg:w-4/5">
+      <div className="w-11/12 mx-auto space-y-4 md:w-4/5">
         <div className="flex justify-center py-8">
           <LoadingSpinner />
         </div>
@@ -23,7 +23,7 @@ export default function DramaSlider({ dramas, currentLanguage, isLoading }) {
   }
 
   return (
-    <div className="main-image-slider">
+    <div className="mx-auto main-image-slider md:w-4/5">
       <Swiper
         spaceBetween={30}
         slidesPerView={1}
