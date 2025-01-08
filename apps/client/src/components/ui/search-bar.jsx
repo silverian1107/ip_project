@@ -5,12 +5,11 @@ import { Search } from 'lucide-react';
 const SearchBar = ({ variant = 'header' }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [search, setSearch] = useState(searchParams.get('query') || '');
+  const [search, setSearch] = useState(searchParams.get('search') || '');
 
-  // Sync search state with URL query parameter when on search page
   useEffect(() => {
     if (variant === 'search-page') {
-      const queryParam = searchParams.get('query') || '';
+      const queryParam = searchParams.get('search') || '';
       setSearch(queryParam);
     }
   }, [searchParams, variant]);
@@ -18,15 +17,12 @@ const SearchBar = ({ variant = 'header' }) => {
   const handleSearch = (value) => {
     const trimmedValue = value.trim();
     if (variant === 'header') {
-      // In header: navigate to search page only if there's a value
       if (trimmedValue.length > 0) {
-        navigate(`/search?query=${encodeURIComponent(trimmedValue)}`);
+        navigate(`/search?search=${encodeURIComponent(trimmedValue)}`);
       }
     } else {
-      // On search page: update URL params
-      // If empty, remove the query parameter entirely
       if (trimmedValue.length > 0) {
-        setSearchParams({ query: trimmedValue });
+        setSearchParams({ search: trimmedValue });
       } else {
         setSearchParams({});
       }
@@ -43,9 +39,8 @@ const SearchBar = ({ variant = 'header' }) => {
     const newValue = e.target.value;
     setSearch(newValue);
 
-    // Auto-update search results only on search page
     if (variant === 'search-page') {
-      handleSearch(newValue); // Remove the length check to handle empty state
+      handleSearch(newValue);
     }
   };
 

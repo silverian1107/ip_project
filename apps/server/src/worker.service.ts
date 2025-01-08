@@ -179,20 +179,17 @@ export class WorkerService {
         knownForDepartment: person.known_for_department || null,
         placeOfBirth: person.place_of_birth || null,
         alsoKnownAs: person.also_known_as || [],
+        profilePath: person.profile_path || null,
       });
 
-      // Save the new person to the database and log it
       await this.personRepository.save(newPerson);
-      this.logger.debug(`Person ${person.name} saved successfully.`);
     } catch (error) {
       this.logger.error(
         `Error while saving person ${person.name}:`,
         error.stack,
       );
 
-      // Check if the error is specifically a duplicate key issue and handle accordingly
       if (error?.code === '23505') {
-        // This is a PostgreSQL code for unique constraint violation
         this.logger.warn(
           `Duplicate entry for person ${person.name}. Skipping insert.`,
         );

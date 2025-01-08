@@ -44,3 +44,9 @@ export const BookmarkClient = {
     return createCustomClient('http://localhost:3001/api/bookmark', false);
   }
 };
+
+export const SearchClient = {
+  unauth: () => {
+    return createCustomClient('http://localhost:3001/api/search', false);
+  }
+};
