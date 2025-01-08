@@ -38,6 +38,16 @@ export const useIsLikedDrama = (dramaId) => {
   });
 };
 
+export const useIsBookmarkedDrama = (dramaId) => {
+  return useQuery({
+    queryKey: ['is-bookmarked-drama', dramaId],
+    queryFn: async () => {
+      const response = await DramaEndpoints.isBookmarked(dramaId);
+      return response;
+    }
+  });
+};
+
 export const usePopularDramas = () => {
   return useQuery({
     queryKey: ['popular-dramas'],

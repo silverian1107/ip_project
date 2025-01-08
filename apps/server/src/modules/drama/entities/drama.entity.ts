@@ -1,3 +1,4 @@
+import { Bookmark } from 'src/modules/bookmark/entities/bookmark.entity';
 import { Like } from 'src/modules/like/entities/like.entity';
 import { Post } from 'src/modules/post/entities/post.entity';
 import { Review } from 'src/modules/review/entities/review.entitiy';
@@ -70,4 +71,7 @@ export class Drama {
 
   @OneToMany(() => Review, (review) => review.drama)
   reviews: Review[];
+
+  @OneToMany(() => Bookmark, (bookmark) => bookmark.drama)
+  bookmarks: Bookmark[];
 }

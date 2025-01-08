@@ -35,3 +35,12 @@ export const LikeClient = {
     return createCustomClient('http://localhost:3001/api/likes', false);
   }
 };
+
+export const BookmarkClient = {
+  auth: () => {
+    return createCustomClient('http://localhost:3001/api/bookmark', true);
+  },
+  unauth: () => {
+    return createCustomClient('http://localhost:3001/api/bookmark', false);
+  }
+};

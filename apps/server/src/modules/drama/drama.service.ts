@@ -20,7 +20,14 @@ export class DramaService {
   async findById(id: number): Promise<Drama> {
     const drama = await this.dramaRepository.findOne({
       where: { id },
-      relations: ['reviews', 'reviews.user', 'likes', 'likes.user'],
+      relations: [
+        'reviews',
+        'reviews.user',
+        'likes',
+        'likes.user',
+        'bookmarks',
+        'bookmarks.user',
+      ],
     });
     if (!drama) {
       throw new Error('Drama not found');
@@ -69,5 +76,10 @@ export class DramaService {
   async isLiked(dramaId: number, userId: number): Promise<boolean> {
     const drama = await this.findById(dramaId);
     return drama.likes.some((like) => like.user.id === userId);
+  }
+
+  async isBookmarked(dramaId: number, userId: number): Promise<boolean> {
+    const drama = await this.findById(dramaId);
+    return drama.bookmarks.some((bookmark) => bookmark.user.id === userId);
   }
 }

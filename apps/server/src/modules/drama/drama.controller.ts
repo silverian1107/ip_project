@@ -44,4 +44,14 @@ export class DramaController {
   async isLiked(@Param('id', ParseIntPipe) id: number, @GetUser() user: User) {
     return await this.dramaService.isLiked(id, user.id);
   }
+
+  @Get('isBookmarked/:id')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  async isBookmarked(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() user: User,
+  ) {
+    return await this.dramaService.isBookmarked(id, user.id);
+  }
 }
