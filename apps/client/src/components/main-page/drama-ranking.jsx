@@ -6,6 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { cn } from '../../libs/utils';
 import { IMG_BASE_URL_SM } from '../MainPage';
 import LoadingSpinner from '../ui/spinner';
+import { useNavigate } from 'react-router-dom';
 
 export default function DramaRankings({
   title,
@@ -15,6 +16,7 @@ export default function DramaRankings({
   onLike,
   isLoading
 }) {
+  const navigation = useNavigate();
   const { t, i18n } = useTranslation('main-page');
   const currentLanguage = i18n.language;
 
@@ -49,7 +51,10 @@ export default function DramaRankings({
         }}
       >
         {dramas.map((item, index) => (
-          <SwiperSlide key={item.id}>
+          <SwiperSlide
+            key={item.id}
+            onClick={() => navigation(`/drama/${item.id}`)}
+          >
             <motion.div
               className="relative cursor-pointer aspect-[2/3] overflow-hidden rounded-lg shadow-md transition-transform hover:scale-105 group"
               whileHover="hover"

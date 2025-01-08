@@ -62,7 +62,7 @@ export default function TitleSection({ title, dramaId }) {
   return (
     <div className="p-6 rounded-lg shadow-md title-section bg-background">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-transparent bg-gradient-to-r from-blue-100 to-blue-400 bg-clip-text">
+        <h1 className="text-3xl font-bold text-transparent bg-gradient-to-br from-blue-100 to-blue-400 bg-clip-text">
           {title}
         </h1>
         <div className="flex space-x-2">

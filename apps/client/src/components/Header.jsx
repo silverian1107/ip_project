@@ -39,7 +39,7 @@ function Header() {
       </div>
 
       <Link className="logo" to="/">
-        Drama<span className="text-blue-400">Sphere</span>
+        Drama<span className="text-blue-500">Sphere</span>
       </Link>
 
       <div className="nav-right">

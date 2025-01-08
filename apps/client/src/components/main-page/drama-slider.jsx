@@ -7,8 +7,11 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { IMG_BASE_URL } from '../MainPage';
 import LoadingSpinner from '../ui/spinner';
+import { useNavigate } from 'react-router-dom';
 
 export default function DramaSlider({ dramas, currentLanguage, isLoading }) {
+  const navigation = useNavigate();
+
   if (isLoading) {
     return (
       <div className="w-11/12 mx-auto space-y-4 lg:w-4/5">
@@ -31,7 +34,11 @@ export default function DramaSlider({ dramas, currentLanguage, isLoading }) {
         className="main-swiper-container relative w-full h-[70vh]"
       >
         {dramas.slice(0, 5).map((drama) => (
-          <SwiperSlide key={drama.id} className="relative group">
+          <SwiperSlide
+            key={drama.id}
+            className="relative group"
+            onClick={() => navigation(`/drama/${drama.id}`)}
+          >
             <img
               src={`${IMG_BASE_URL}${drama.backdropPath}`}
               alt={drama.title}

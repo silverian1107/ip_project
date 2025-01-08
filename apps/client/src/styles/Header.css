@@ -9,6 +9,8 @@
   position: relative;
   flex-wrap: wrap; /* 화면이 작아질 때 요소들이 줄어들 수 있게 설정 */
   z-index: 5; /* 헤더가 다른 요소 위에 표시되도록 설정 */
+  width: 90%;
+  margin: 0 auto;
 }
 
 /* 로고는 헤더 중앙에 배치 */
