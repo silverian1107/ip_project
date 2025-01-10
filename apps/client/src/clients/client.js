@@ -50,3 +50,9 @@ export const SearchClient = {
     return createCustomClient('http://localhost:3001/api/search', false);
   }
 };
+
+export const RecommendationClient = {
+  auth: () => {
+    return createCustomClient('http://localhost:3001/api/recommend', true);
+  }
+};

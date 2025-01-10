@@ -2,17 +2,19 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
-import { useAccount } from '../hooks/queries/use-auth';
+import { useAccount, useLogout } from '../hooks/queries/use-auth';
 import '../styles/Header.css';
 import SearchBar from './ui/search-bar';
 import { ChevronDown } from 'lucide-react';
 
 const Header = () => {
   const { t } = useTranslation('header');
-  const { account, logout, isLoading, isError } = useAccount();
+  const { data: account, isLoading, isError } = useAccount();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const i18n = useTranslation().i18n;
+
+  const logout = useLogout();
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -68,15 +70,20 @@ const Header = () => {
         {!isLoading && !isError && account ? (
           <div className="relative">
             <div
-              className="flex items-center cursor-pointer"
+              className="flex flex-row items-center cursor-pointer"
               onClick={toggleProfileDropdown}
             >
               <img
                 src={account.avatarUrl || '/user.png'}
                 alt="Avatar"
-                className="w-8 h-8 mr-2 rounded-full"
+                className="h-8 mr-2 rounded-full"
               />
-              <span>{account.username} ▼</span>
+              <p className="flex items-center gap-2 w-fit">
+                {account.username}{' '}
+                <span className="text-sm">
+                  <ChevronDown size={16} />
+                </span>
+              </p>
             </div>
             {isProfileDropdownOpen && (
               <div className="absolute right-0 z-50 w-48 mt-2 text-black bg-white rounded-md shadow-lg">

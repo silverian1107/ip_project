@@ -27,5 +27,9 @@ export const DramaEndpoints = {
 
   isBookmarked: async (id) => {
     return (await DramaClient.auth().get(`/isBookmarked/${id}`)).data;
+  },
+
+  getBookmarked: async () => {
+    return (await DramaClient.auth().get('/bookmarked')).data;
   }
 };

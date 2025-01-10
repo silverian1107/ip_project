@@ -10,6 +10,8 @@ import DramaList from './main-page/drama-list';
 import DramaRankings from './main-page/drama-ranking';
 import DramaSlider from './main-page/drama-slider';
 import LoadingSpinner from './ui/spinner';
+import { useRecommendation } from '../hooks/queries/use-recommendation';
+import { useProfile } from '../hooks/queries/use-user';
 
 export const IMG_BASE_URL = 'https://image.tmdb.org/t/p/w1280/';
 export const IMG_BASE_URL_SM = 'https://image.tmdb.org/t/p/w500/';
@@ -17,8 +19,11 @@ export const IMG_BASE_URL_SM = 'https://image.tmdb.org/t/p/w500/';
 export default function MainPage() {
   // eslint-disable-next-line no-unused-vars
   const { t, i18n } = useTranslation('main-page');
+  const { data: profile } = useProfile();
   const currentLanguage = i18n.language;
   const navigate = useNavigate();
+
+  const { data } = useRecommendation({ enabled: !!profile });
 
   const {
     data: dramaData,
@@ -62,6 +67,14 @@ export default function MainPage() {
         dramas={popular}
         currentLanguage={currentLanguage}
       />
+      {data && data.length > 0 && (
+        <DramaRankings
+          title="For you"
+          dramas={data}
+          isLoading={isLoading}
+          onClickDramaItem={onClickDramaItem}
+        />
+      )}
       <DramaRankings
         title="popular"
         dramas={popular}

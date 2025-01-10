@@ -82,4 +82,10 @@ export class DramaService {
     const drama = await this.findById(dramaId);
     return drama.bookmarks.some((bookmark) => bookmark.user.id === userId);
   }
+
+  async getBookmarks(userId: number) {
+    return await this.dramaRepository.find({
+      where: { bookmarks: { user: { id: userId } } },
+    });
+  }
 }

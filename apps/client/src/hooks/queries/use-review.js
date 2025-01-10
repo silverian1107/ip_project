@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { ReviewEndpoints } from '../../clients/review';
 import { toast } from 'sonner';
 
@@ -10,6 +10,16 @@ export const useReview = () => {
     },
     onSuccess: () => {
       toast.success('Review added successfully!');
+    }
+  });
+};
+
+export const useReviewByUser = () => {
+  return useQuery({
+    queryKey: ['review-by-user'],
+    queryFn: async () => {
+      const response = await ReviewEndpoints.getReviewByUser();
+      return response;
     }
   });
 };

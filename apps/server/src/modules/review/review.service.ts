@@ -33,4 +33,11 @@ export class ReviewService {
 
     return await this.reviewRepository.save(review);
   }
+
+  async getReviewsByUserId(userId: number) {
+    return await this.reviewRepository.find({
+      where: { user: { id: userId } },
+      relations: ['user', 'drama'],
+    });
+  }
 }

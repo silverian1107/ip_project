@@ -28,6 +28,13 @@ export class DramaController {
     return await this.dramaService.getNewestDramas();
   }
 
+  @Get('bookmarked')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  async getBookmarks(@GetUser() user: User) {
+    return await this.dramaService.getBookmarks(user.id);
+  }
+
   @Get(':id')
   async getDrama(@Param('id') id: number) {
     return await this.dramaService.findById(id);

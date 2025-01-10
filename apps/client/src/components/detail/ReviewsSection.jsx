@@ -1,8 +1,7 @@
-import { formatDistanceToNow } from 'date-fns';
-import { FilePenLine, Trash } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useReview } from '../../hooks/queries/use-review';
 import { useProfile } from '../../hooks/queries/use-user';
+import ReviewCard from '../reviews/review-card';
 
 export default function ReviewsSection({ id, reviews }) {
   const { data: user, isLoading } = useProfile();
@@ -64,10 +63,6 @@ export default function ReviewsSection({ id, reviews }) {
     setNewReview({ content: '', rating: 0, hoverRating: 0 });
   };
 
-  const handleDeleteReview = (id) => {
-    setLocalReviews((prev) => prev.filter((review) => review.id !== id));
-  };
-
   const handleStarClick = (rating) => {
     setNewReview((prev) => ({
       ...prev,
@@ -81,15 +76,6 @@ export default function ReviewsSection({ id, reviews }) {
 
   const handleMouseLeave = () => {
     setNewReview((prev) => ({ ...prev, hoverRating: 0 }));
-  };
-
-  const handleEditReview = (review) => {
-    setEditingReview(review);
-    setNewReview({
-      content: review.content,
-      rating: review.rating,
-      hoverRating: 0
-    });
   };
 
   if (isLoading) {
@@ -106,46 +92,7 @@ export default function ReviewsSection({ id, reviews }) {
               a.userId === user?.id ? -1 : b.userId === user?.id ? 1 : 0
             )
             .map((review) => (
-              <div
-                key={review.id}
-                className={`p-4 rounded-lg ${
-                  review.userId === user?.id ? 'bg-blue-900' : 'bg-gray-800/60'
-                }`}
-              >
-                <div className="flex items-center justify-start gap-2">
-                  <h3 className="text-lg font-semibold leading-1">
-                    {review.user.username}
-                  </h3>
-                  <p className="text-sm text-gray-400">
-                    {formatDistanceToNow(new Date(review.createdAt), {
-                      addSuffix: true
-                    })}
-                  </p>
-                  {review.user.id === user?.id && (
-                    <div className="flex ml-auto space-x-2">
-                      <button
-                        onClick={() => handleEditReview(review)}
-                        className="flex items-center gap-1 px-2 space-x-2 text-blue-600 transition duration-200 border border-transparent rounded-md hover:border-blue-600"
-                      >
-                        <FilePenLine size={16} />
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDeleteReview(review.id)}
-                        className="flex items-center gap-1 px-2 text-red-500 transition duration-200 border border-transparent rounded-md hover:border-red-500"
-                      >
-                        <Trash size={16} />
-                        Delete
-                      </button>
-                    </div>
-                  )}
-                </div>
-                <p className="my-2 text-yellow-400">
-                  {'★'.repeat(review.rating)}
-                  {'☆'.repeat(5 - review.rating)}
-                </p>
-                <p className="text-gray-300">{review.content}</p>
-              </div>
+              <ReviewCard user={user} review={review} key={review.id} />
             ))}
         </div>
       ) : (

@@ -3,27 +3,19 @@ import ProfileHeader from '../components/profile/profile-header';
 import TabContent from '../components/profile/tab-content';
 import LoadingSpinner from '../components/ui/spinner';
 import { useProfile } from '../hooks/queries/use-user';
-
-const dummyDramas = [
-  {
-    title: 'Eternal Sunshine',
-    rating: 4.5,
-    review: 'A masterpiece that explores the depths of human emotions.',
-    date: '2024-07-07',
-    image: '/placeholder.svg?height=300&width=200'
-  },
-  {
-    title: 'Midnight Serenade',
-    rating: 4.0,
-    review: 'An enchanting journey through love and music.',
-    date: '2024-07-08',
-    image: '/placeholder.svg?height=300&width=200'
-  }
-];
+import { useBookmarkedDramas } from '../hooks/queries/use-drama';
+import { useReviewByUser } from '../hooks/queries/use-review';
 
 export default function MyPage() {
   const [activeTab, setActiveTab] = useState('Wishlist');
   const { data: account, isLoading, isError } = useProfile();
+
+  const { data: bookmarked, isLoading: isLoadingBookmarked } =
+    useBookmarkedDramas();
+
+  const { data: reviews, isLoading: isLoadingReviews } = useReviewByUser();
+
+  console.log('reviews', reviews);
 
   const handleTabClick = (tab) => setActiveTab(tab);
 
@@ -33,6 +25,10 @@ export default function MyPage() {
 
   if (isError) {
     return <div>Error loading profile data</div>;
+  }
+
+  if (isLoadingBookmarked || isLoadingReviews) {
+    return <LoadingSpinner />;
   }
 
   return (
@@ -57,7 +53,11 @@ export default function MyPage() {
             ))}
           </div>
 
-          <TabContent activeTab={activeTab} dramas={dummyDramas} />
+          <TabContent
+            activeTab={activeTab}
+            dramas={bookmarked}
+            reviews={reviews}
+          />
         </div>
       </div>
     </div>

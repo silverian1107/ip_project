@@ -12,6 +12,7 @@ import { GenreModule } from './modules/genre/genre.module';
 import { ReviewModule } from './modules/review/review.module';
 import { BookmarkModule } from './modules/bookmark/bookmark.module';
 import { SearchModule } from './modules/search/search.module';
+import { RecommendModule } from './modules/recommend/recommend.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { SearchModule } from './modules/search/search.module';
     ReviewModule,
     BookmarkModule,
     SearchModule,
+    RecommendModule,
   ],
 })
 export class AppModule {}
